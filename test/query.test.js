@@ -1,11 +1,12 @@
 'use strict';
-var assert = require('assert');
-var index = require('../index');
-it.optional = require('../extensions/it-optional');
+const assert = require('assert');
+const index = require('../index');
 
-describe('index', function() {
-    it.optional('test failed', function() {
-        assert.equal({
-        }, index.MongoClient());
-    });
+const correctResult = require('../result');
+
+describe('query test', function() {
+    it('passed', async function(){
+        let result = await index;
+        assert.deepEqual(correctResult, result);
+    }).timeout(5000);
 });

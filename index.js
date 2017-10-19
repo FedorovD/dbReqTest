@@ -1,26 +1,22 @@
 'use strict';
 var MongoClient = require('mongodb').MongoClient;
 
-// Connection URL
-var url = 'mongodb://localhost:27017/test';
-MongoClient.connect(url, function(err, db) {
-console.log("Connected correctly to server");
+var url = 'mongodb://localhost:27017/truvoice_test';
 
-insertDocuments(db, function() {
-    db.close();
-  });
-});
+const queryReq = require('./queryReq');
+
+module.exports = MongoClient.connect(url)
+    .then(db => {
+        return db
+    })
+    .then(db => {
+        let res = query(db).toArray();
+        db.close();
+        return res;
+    })
+    .catch(e => console.error(e));
 
 
-var insertDocuments = function(db, callback) {
-    var collection = db.collection('user');
-    collection.find({}).toArray(function(err, docs) {
-        console.log("Found the following records");
-        console.dir(docs);
-        callback(docs);
-      });
-  }
-
-  module.exports = {
-    MongoClient: MongoClient
-};
+function query(db) {
+    return db.collection('opportunities').aggregate(queryReq);
+}
