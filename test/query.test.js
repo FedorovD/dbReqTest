@@ -7,6 +7,6 @@ const correctResult = require('../result');
 describe('query test', function() {
     it('passed', async function(){
         let result = await index;
-        assert.deepEqual(correctResult, result);
+        assert.equal(JSON.stringify(correctResult),JSON.stringify(result));
     }).timeout(5000);
 });
